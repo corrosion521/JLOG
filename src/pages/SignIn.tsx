@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Alert,
   Pressable,
@@ -7,17 +7,22 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
 import DismissKeyboardView from '../components/DismissKeyboardView';
+import { useAuth } from '../AuthContext';
 
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignIn({navigation}: SignInScreenProps) {
+function SignIn({ navigation }: SignInScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
+
+  const { isLoggedIn, setLoggedIn } = useAuth();
+
+
 
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
@@ -32,8 +37,15 @@ function SignIn({navigation}: SignInScreenProps) {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
-    Alert.alert('알림', '로그인 되었습니다.');
-  }, [email, password]);
+    //Alert.alert('알림', '로그인 되었습니다.');
+
+    //이동
+    setLoggedIn(true)
+    if (isLoggedIn == false)
+      Alert.alert('로로로');
+
+
+  }, [email, password, isLoggedIn]);
 
   const toSignUp = useCallback(() => {
     navigation.navigate('SignUp');
@@ -89,9 +101,7 @@ function SignIn({navigation}: SignInScreenProps) {
           onPress={onSubmit}>
           <Text style={styles.loginButtonText}>로그인</Text>
         </Pressable>
-        <Pressable onPress={toSignUp}>
-          <Text>회원가입하기</Text>
-        </Pressable>
+
       </View>
     </DismissKeyboardView>
   );
