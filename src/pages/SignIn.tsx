@@ -34,16 +34,14 @@ function SignIn({ navigation }: SignInScreenProps) {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
     }
-    if (!password || !password.trim()) {
+    else if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
-    //Alert.alert('알림', '로그인 되었습니다.');
+    else {
+      //이동
+      setLoggedIn(true)
 
-    //이동
-    setLoggedIn(true)
-    if (isLoggedIn == false)
-      Alert.alert('로로로');
-
+    }
 
   }, [email, password, isLoggedIn]);
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-function Posts() {
+function SettingsMy() {
     return (
         <View>
-            <Text>게시물 화면</Text>
+            <Text>s1</Text>
         </View>
     );
 }
 
-export default Posts;
+export default SettingsMy;
