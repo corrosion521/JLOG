@@ -4,13 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Settings from './src/pages/Settings';
 import Posts from './src/pages/Post';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import Root from './src/pages/Root';
 import First from './src/pages/First';
 import { AuthProvider, useAuth } from './src/AuthContext';
 import AppInner from './AppInner';
+import SplashScreen from 'react-native-splash-screen';
 
 export type LoggedInParamList = {
   Settings: undefined;
@@ -34,6 +35,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   // App 컴포넌트에서
+  useEffect(() => {
+    try {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 1500); //스플래시 활성화 시간 2초
+    } catch (e) {
+    }
+  });
 
   return (
     <AuthProvider>

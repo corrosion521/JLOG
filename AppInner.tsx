@@ -9,6 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuth } from './src/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
+import SettingsMy from './src/pages/SettingsMy';
+import { KeyboardAvoidingView } from 'react-native';
 export type LoggedInParamList = {
     Settings: undefined;
     Root: undefined;
@@ -23,6 +25,16 @@ export type RootStackParamList = {
     First: undefined;
 
 };
+
+export type SettingStackParamList = {
+    My: undefined; // 상태 조작
+    Posts: undefined;
+    Reply: undefined;
+    Scrap: undefined;
+
+};
+
+
 function AppInner() {
 
 
@@ -40,8 +52,10 @@ function AppInner() {
                     name="Posts"
                     component={Posts}
                     options={{
-                        title: '게시물'
+                        title: '게시물',
+
                     }}
+
                 />
                 <Tab.Screen
                     name="Root"
@@ -54,6 +68,7 @@ function AppInner() {
                     options={{ title: '마이페이지' }}
                 />
             </Tab.Navigator >
+
         ) : (
             <Stack.Navigator>
                 <Stack.Screen

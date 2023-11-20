@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import {
     Alert,
+    Image,
     Pressable,
     StyleSheet,
     Text,
@@ -26,7 +27,11 @@ function First({ navigation }: FirstScreenProps) {
         <View>
 
             <View style={styles.buttonLocation}>
+                <Image source={require('../assets/star.png')
+                }
+                    style={{ width: 20, height: 20, marginTop: 300, marginBottom: 200 }}
 
+                ></Image>
                 <Pressable onPress={toSignIn}>
                     <Text style={styles.loginButton}
                     >로그인</Text>
@@ -83,7 +88,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        marginTop: '50%',
         height: '80%',
 
     }
