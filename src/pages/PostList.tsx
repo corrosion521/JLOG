@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -9,14 +9,14 @@ import {
   View,
   StyleSheet,
   Pressable,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Avatar, Button, Image, SearchBar } from 'react-native-elements';
-import { NavigationContainer } from '@react-navigation/native';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Avatar, Button, Image, SearchBar } from "react-native-elements";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+} from "@react-navigation/native-stack";
 
 export type SearchStackParamList = {
   PostList: undefined;
@@ -42,218 +42,217 @@ export interface Post {
 // Post 타입의 배열 posts 변수 (게시물 리스트)
 const posts: Post[] = [
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: 'usj.jpeg',
-    id: '1',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "usj.jpeg",
+    id: "1",
   },
   {
-    title: 'osaka',
-    nickname: 'nick',
+    title: "osaka",
+    nickname: "nick",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../post',
-    id: '2',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../post",
+    id: "2",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '3',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "3",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '4',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "4",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '5',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "5",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '6',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "6",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '7',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "7",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '8',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "8",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '9',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "9",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '10',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "10",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '11',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "11",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '12',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "12",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '13',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "13",
   },
   {
-    title: 'osaka',
-    nickname: 'nick',
+    title: "osaka",
+    nickname: "nick",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '14',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "14",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '15',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "15",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '16',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "16",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '/src/Data/usj.jpeg',
-    id: '17',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "/src/Data/usj.jpeg",
+    id: "17",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '18',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "18",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '19',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "19",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '20',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "20",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '21',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "21",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '22',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "22",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '23',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "23",
   },
   {
-    title: '오사카 테마파크 순회 코스!',
-    nickname: '아무개',
+    title: "오사카 테마파크 순회 코스!",
+    nickname: "아무개",
     profileImg:
-      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-    postImg: '../Data/usj.jpeg',
-    id: '24',
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    postImg: "../Data/usj.jpeg",
+    id: "24",
   },
-
 ];
 
 type SearchScreenProps = NativeStackScreenProps<
   SearchStackParamList,
-  'PostList'
+  "PostList"
 >;
 
 function PostList({ navigation }: SearchScreenProps) {
   // 검색창 누르면 검색페이지로 이동
   const toSearch = useCallback(() => {
-    navigation.navigate('Search');
+    navigation.navigate("Search");
   }, [navigation]);
 
   const onPressPost = () => {
     // * To Do : 게시물 상세페이지로 이동 *
-    Alert.alert('You press the post');
+    Alert.alert("You press the post");
   };
 
   const onPressCategory = useCallback(() => {
-    navigation.navigate('Category');
+    navigation.navigate("Category");
   }, [navigation]);
 
   const renderItem = ({ item }: { item: Post }) => {
@@ -277,7 +276,7 @@ function PostList({ navigation }: SearchScreenProps) {
           </View>
           <Image
             // source={{uri: item.postImg}}
-            source={require('../Data/usj.jpeg')}
+            source={require("../Data/usj.jpeg")}
             // source={require(item.postImg)}
             style={{ height: 200 }}
           />
@@ -293,17 +292,17 @@ function PostList({ navigation }: SearchScreenProps) {
           <SearchBar
             onFocus={toSearch}
             placeholder="게시물을 검색해보세요"
-            placeholderTextColor={'#8E8D8D'}
-            leftIconContainerStyle={{ backgroundColor: '#F5F5F7' }}
-            inputContainerStyle={{ backgroundColor: '#F5F5F7' }}
-            searchIcon={{ color: 'black' }}
-            clearIcon={{ color: 'black' }}
+            placeholderTextColor={"#8E8D8D"}
+            leftIconContainerStyle={{ backgroundColor: "#F5F5F7" }}
+            inputContainerStyle={{ backgroundColor: "#F5F5F7" }}
+            searchIcon={{ color: "black" }}
+            clearIcon={{ color: "black" }}
             inputStyle={{
-              backgroundColor: '#F5F5F7',
-              color: 'black',
+              backgroundColor: "#F5F5F7",
+              color: "black",
             }}
             containerStyle={{
-              backgroundColor: 'none',
+              backgroundColor: "none",
               borderTopWidth: 0,
               borderBottomWidth: 0,
             }}
@@ -317,15 +316,16 @@ function PostList({ navigation }: SearchScreenProps) {
         <Text style={styles.title}>인기 게시물</Text>
         <SafeAreaView
           style={{
-            justifyContent: 'center',
-            flexDirection: 'row',
-            paddingVertical: 10,
+            justifyContent: "center",
+            flexDirection: "row",
+            // paddingVertical: 10,
             paddingHorizontal: 10,
-          }}>
+          }}
+        >
           <FlatList
             data={posts}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
           />
         </SafeAreaView>
       </View>
@@ -335,17 +335,17 @@ function PostList({ navigation }: SearchScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     paddingVertical: 10,
     paddingHorizontal: 10,
   },
