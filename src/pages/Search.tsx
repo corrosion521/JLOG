@@ -53,14 +53,17 @@ function SearchBox({navigation}) {
     };
   }, [keyword]);
 
-  const onPressPost = useCallback(() => {
-    navigation.navigate('PostDetail');
-  }, [navigation]);
+  const onPressPost = useCallback(
+    (item: IPostData) => {
+      navigation.navigate('PostDetail', {item});
+    },
+    [navigation],
+  );
 
   const renderItem = ({item}: {item: IPostData}) => {
     return (
       <View style={styles.post}>
-        <Pressable onPress={onPressPost}>
+        <Pressable onPress={e => onPressPost(item)}>
           <View style={styles.postHeader}>
             <Avatar
               rounded
@@ -81,8 +84,8 @@ function SearchBox({navigation}) {
             </View>
           </View>
           <Image
-            source={{uri: item.postImg}}
-            // source={require('../Data/usj.jpg')}
+            // source={{uri: item.postImg}}
+            source={require('../Data/usj.jpg')}
             // source={require(item.postImg)}
             style={{height: 200, borderRadius: 10}}
           />
