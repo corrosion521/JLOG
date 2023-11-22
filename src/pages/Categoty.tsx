@@ -2,9 +2,11 @@ import {View} from 'react-native';
 import {Text} from 'react-native-elements';
 
 function Category() {
+  return(
   <View>
     <Text>카테고리 페이지</Text>
-  </View>;
+  </View>
+  );
 }
 
 export default Category;
