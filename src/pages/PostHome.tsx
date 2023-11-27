@@ -9,6 +9,7 @@ import {
   View,
   StyleSheet,
   Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Avatar, Button, Image, SearchBar} from 'react-native-elements';
@@ -18,6 +19,7 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import {IPostData, postData} from '../Data/PostData';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 export type PostStackParamList = {
   PostHome: undefined;
@@ -48,6 +50,8 @@ function PostHome({navigation}: PostScreenProps) {
   // 각 게시물 프레임
   const renderItem = ({item}: {item: IPostData}) => {
     return (
+      // <TouchableWithoutFeedback>
+      // <SafeAreaView>
       <View style={styles.post}>
         <Pressable onPress={e => onPressPost(item)}>
           <View style={styles.postHeader}>
@@ -59,10 +63,7 @@ function PostHome({navigation}: PostScreenProps) {
             />
             <View>
               <View>
-                <Text
-                  style={{fontSize: 14, fontWeight: 'bold', color: 'black'}}>
-                  {item.title}
-                </Text>
+                <Text style={styles.postTitle}>{item.title}</Text>
               </View>
               <View>
                 <Text style={{fontSize: 12}}>{item.nickname}</Text>
@@ -77,6 +78,8 @@ function PostHome({navigation}: PostScreenProps) {
           />
         </Pressable>
       </View>
+      // </SafeAreaView>
+      // </TouchableWithoutFeedback>
     );
   };
 
@@ -112,7 +115,12 @@ function PostHome({navigation}: PostScreenProps) {
           />
         </View>
         <Pressable onPress={onPressCategory}>
-          <Text>카테고리</Text>
+          {/* <Text>카테고리</Text> */}
+          <Icon
+            name="menu"
+            size={20}
+            color="black"
+            style={{paddingRight: 10}}></Icon>
         </Pressable>
       </View>
 
@@ -126,11 +134,14 @@ function PostHome({navigation}: PostScreenProps) {
           style={{
             justifyContent: 'center',
             paddingHorizontal: 10,
+            paddingBottom: 120,
+            // flex: 1,
           }}>
           <FlatList
             data={postData}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            // contentContainerStyle={{flex: 1}}
           />
         </SafeAreaView>
       </View>
@@ -157,12 +168,18 @@ const styles = StyleSheet.create({
   post: {
     display: 'flex',
     marginBottom: 20,
+    // height: 250,
   },
   postHeader: {
     display: 'flex',
     flexDirection: 'row',
     marginVertical: 5,
     columnGap: 5,
+  },
+  postTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
 
