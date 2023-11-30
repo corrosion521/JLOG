@@ -1,4 +1,4 @@
-package com.jlog;
+package com.geo.jlog;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

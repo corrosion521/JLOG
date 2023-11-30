@@ -162,88 +162,6 @@ function Settings() {
         </Pressable>
 
       </View>
-
-
-      {posts ? (
-        <FlatList
-          data={content}
-          renderItem={({ item, index }) => (
-            <View style={styles.listZone}>
-              {/* <View style={{ borderWidth: 30 }}></View> */}
-              <Image source={require('../assets/testpng.png')
-              }
-                style={{ borderWidth: 30, width: 15, height: 15, marginRight: 5 }}
-
-              ></Image>
-              <Text style={styles.contentText}>{item}{'\n'}{writer[index]}</Text>
-
-              {/* <View style={{ borderWidth: 30, marginLeft: 'auto' }}
-              ></View> */}
-
-              <Image source={require('../assets/close.png')
-              }
-                style={{ borderWidth: 7, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
-
-              ></Image>
-            </View>
-          )
-
-          }
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.contentContainer}
-        />
-      ) : null}
-      {reply ? (
-        <FlatList
-          data={rpContent}
-          renderItem={({ item, index }) => (
-            <View style={styles.listZone}>
-
-              <Text style={styles.contentText}>{rpReview[index]}{'\n'}{item}</Text>
-
-
-              <Image source={require('../assets/close.png')
-              }
-                style={{ borderWidth: 7, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
-
-              ></Image>
-            </View>
-          )
-
-          }
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.contentContainer}
-        />
-      ) : null}
-      {scrap ? (
-        <FlatList
-          data={srContent}
-          renderItem={({ item, index }) => (
-            <View style={styles.listZone}>
-              {/* <View style={{ borderWidth: 30 }}></View> */}
-              <Image source={require('../assets/testpng.png')
-              }
-                style={{ borderWidth: 30, width: 15, height: 15, marginRight: 5 }}
-
-              ></Image>
-              <Text style={styles.contentText}>{item}{'\n'}{srWriter[index]}</Text>
-
-              {/* <View style={{ borderWidth: 30, marginLeft: 'auto' }}
-              ></View> */}
-
-              <Image source={require('../assets/star.png')
-              }
-                style={{ borderWidth: 12, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
-
-              ></Image>
-            </View>
-          )
-
-          }
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.contentContainer}
-        />
-      ) : null}
       {info ? (
         <ScrollView>
           <View
@@ -382,6 +300,88 @@ function Settings() {
 
       ) : null
       }
+
+      {posts ? (
+        <FlatList
+          data={content}
+          renderItem={({ item, index }) => (
+            <View style={styles.listZone}>
+              {/* <View style={{ borderWidth: 30 }}></View> */}
+              <Image source={require('../assets/testpng.png')
+              }
+                style={{ borderWidth: 30, width: 15, height: 15, marginRight: 5 }}
+
+              ></Image>
+              <Text style={styles.contentText}>{item}{'\n'}{writer[index]}</Text>
+
+              {/* <View style={{ borderWidth: 30, marginLeft: 'auto' }}
+              ></View> */}
+
+              <Image source={require('../assets/close.png')
+              }
+                style={{ borderWidth: 7, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
+
+              ></Image>
+            </View>
+          )
+
+          }
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.contentContainer}
+        />
+      ) : null}
+      {reply ? (
+        <FlatList
+          data={rpContent}
+          renderItem={({ item, index }) => (
+            <View style={styles.listZone}>
+
+              <Text style={styles.contentText}>{rpReview[index]}{'\n'}{item}</Text>
+
+
+              <Image source={require('../assets/close.png')
+              }
+                style={{ borderWidth: 7, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
+
+              ></Image>
+            </View>
+          )
+
+          }
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.contentContainer}
+        />
+      ) : null}
+      {scrap ? (
+        <FlatList
+          data={srContent}
+          renderItem={({ item, index }) => (
+            <View style={styles.listZone}>
+              {/* <View style={{ borderWidth: 30 }}></View> */}
+              <Image source={require('../assets/testpng.png')
+              }
+                style={{ borderWidth: 30, width: 15, height: 15, marginRight: 5 }}
+
+              ></Image>
+              <Text style={styles.contentText}>{item}{'\n'}{srWriter[index]}</Text>
+
+              {/* <View style={{ borderWidth: 30, marginLeft: 'auto' }}
+              ></View> */}
+
+              <Image source={require('../assets/star.png')
+              }
+                style={{ borderWidth: 12, marginLeft: 'auto', width: 2, height: 2, marginBottom: 'auto' }}
+
+              ></Image>
+            </View>
+          )
+
+          }
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.contentContainer}
+        />
+      ) : null}
+
       {editInfo ? (
         <ScrollView>
           <View

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import {
   View,
   Text,
@@ -60,6 +61,17 @@ const logList: ILogData[] = [
 
 function PostDetail({route}) {
   const {item} = route.params; // route.params 안에서 item을 받아옵니다.
+=======
+import { View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { IPostData } from '../Data/PostData';
+interface Props {
+  item: IPostData;
+}
+
+function PostDetail({ route }) {
+  const { item } = route.params; // route.params 안에서 item을 받아옵니다.
+>>>>>>> Stashed changes
 
   // * To Do : postId 등의 값으로 해당 게시물의 내용 받아오기 *
   const contents = '게시물 내용부분';
@@ -158,6 +170,7 @@ function PostDetail({route}) {
 
   return (
     <SafeAreaView style={styles.container}>
+<<<<<<< Updated upstream
       <KeyboardAvoidingView
         style={styles.rootContainer}
         // behavior="padding"
@@ -220,6 +233,22 @@ function PostDetail({route}) {
                 resizeMode="cover"
               />
               <Text>{timelineData.timeline}</Text>
+=======
+      <View style={styles.post}>
+        <View style={styles.title}>
+          <Text style={{ fontSize: 14, fontWeight: 'bold', color: 'black' }}>
+            {item.title}
+          </Text>
+          <View>
+            <Avatar
+              rounded
+              source={{
+                uri: item.profileImg,
+              }}
+            />
+            <View>
+              <Text style={{ fontSize: 12 }}>{item.nickname}</Text>
+>>>>>>> Stashed changes
             </View>
           </View>
 
@@ -254,8 +283,19 @@ function PostDetail({route}) {
             />
           </View>
         </View>
+<<<<<<< Updated upstream
         {/* </DismissKeyboardView> */}
       </KeyboardAvoidingView>
+=======
+        <Image
+          source={{ uri: item.postImg }}
+          // source={require('../Data/usj.jpg')}
+          // source={require(item.postImg)}
+          style={{ height: 200, borderRadius: 10 }}
+        />
+
+      </View>
+>>>>>>> Stashed changes
     </SafeAreaView>
   );
 }
