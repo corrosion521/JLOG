@@ -11,6 +11,7 @@ import { useAuth } from './src/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
 import SettingsMy from './src/pages/SettingsMy';
 import { KeyboardAvoidingView } from 'react-native';
+import RootList from './src/pages/RootList';
 export type LoggedInParamList = {
     Settings: undefined;
     Root: undefined;
@@ -60,6 +61,11 @@ function AppInner() {
                 <Tab.Screen
                     name="Root"
                     component={Root}
+                    options={{ title: '경로 기록' }}
+                />
+                <Tab.Screen
+                    name="RootList"
+                    component={RootList}
                     options={{ title: '나의 경로' }}
                 />
                 <Tab.Screen
