@@ -24,7 +24,6 @@ export type RootStackParamList = {
     SignIn: { isLoggedIn?: boolean }; // 상태 조작
     SignUp: undefined;
     First: undefined;
-
 };
 
 export type SettingStackParamList = {
@@ -32,13 +31,9 @@ export type SettingStackParamList = {
     Posts: undefined;
     Reply: undefined;
     Scrap: undefined;
-
 };
 
-
 function AppInner() {
-
-
     const Tab = createBottomTabNavigator();
     const Stack = createNativeStackNavigator<RootStackParamList>();
 
