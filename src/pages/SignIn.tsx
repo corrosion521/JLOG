@@ -22,27 +22,43 @@ function SignIn({ navigation }: SignInScreenProps) {
 
   const { isLoggedIn, setLoggedIn } = useAuth();
 
-
-
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
   }, []);
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
   }, []);
+
   const onSubmit = useCallback(() => {
     if (!email || !email.trim()) {
-      return Alert.alert('알림', '이메일을 입력해주세요.');
-    }
-    else if (!password || !password.trim()) {
+      return Alert.alert('알림', '아이디를 입력해주세요.');
+    } else if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
-    }
-    else {
+    } else {
       //이동
-      setLoggedIn(true)
-
+      fetch('http://jlog.shop/member/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: email,
+          password: password,
+        }),
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('결과: ', result.status);
+          if (result.status === 'OK') {
+            // 로그인 성공 시
+            setLoggedIn(true);
+            console.log(result);
+          } else {
+            // 실패 시 에러 메세지
+            return Alert.alert('로그인 실패', result.message);
+          }
+        });
     }
-
   }, [email, password, isLoggedIn]);
 
   const toSignUp = useCallback(() => {
@@ -53,11 +69,11 @@ function SignIn({ navigation }: SignInScreenProps) {
   return (
     <DismissKeyboardView>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>이메일</Text>
+        <Text style={styles.label}>아이디</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
-          placeholder="이메일을 입력해주세요"
+          placeholder="아이디를 입력해주세요"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           autoComplete="email"
@@ -74,7 +90,7 @@ function SignIn({ navigation }: SignInScreenProps) {
         <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
+          placeholder="비밀번호를 입력해주세요(영문,숫자)"
           placeholderTextColor="#666"
           importantForAutofill="yes"
           onChangeText={onChangePassword}
@@ -99,7 +115,6 @@ function SignIn({ navigation }: SignInScreenProps) {
           onPress={onSubmit}>
           <Text style={styles.loginButtonText}>로그인</Text>
         </Pressable>
-
       </View>
     </DismissKeyboardView>
   );

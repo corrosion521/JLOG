@@ -123,7 +123,7 @@ function Category() {
           </Pressable> */}
         </View>
       </DismissKeyboardView>
-      <View
+      {/* <View
         style={{
           width: Dimensions.get('window').width - 30,
           height: 200,
@@ -156,7 +156,7 @@ function Category() {
           />
           <Marker coordinate={{latitude: 38, longitude: 127}} />
         </NaverMapView>
-      </View>
+      </View> */}
     </View>
   );
 }

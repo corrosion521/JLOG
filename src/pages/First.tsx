@@ -24,21 +24,28 @@ function First({ navigation }: FirstScreenProps) {
 
 
     return (
-        <View>
+        <View style={{ backgroundColor: '#fefefe', height: 600 }}>
 
-            <View style={styles.buttonLocation}>
-                <Image source={require('../assets/star.png')
+            <View style={styles.buttonLocation
+
+            }>
+                <Image source={require('../assets/launch_screen.jpg')
                 }
-                    style={{ width: 20, height: 20, marginTop: 300, marginBottom: 200 }}
+                    style={{ width: 230, height: 230, marginTop: 100, marginBottom: 30 }}
 
                 ></Image>
-                <Pressable onPress={toSignIn}>
-                    <Text style={styles.loginButton}
-                    >로그인</Text>
-                </Pressable>
-                <Pressable onPress={toSignUp}>
-                    <Text style={styles.loginButton}>회원가입</Text>
-                </Pressable>
+                <View style={
+                    { backgroundColor: '#fefefe' }
+                }>
+                    <Pressable onPress={toSignIn}>
+                        <Text style={styles.loginButton}
+                        >로그인</Text>
+                    </Pressable>
+                    <Pressable onPress={toSignUp}>
+                        <Text style={styles.loginButton}>회원가입</Text>
+                    </Pressable>
+                </View>
+
 
             </View>
         </View>
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-
+        backgroundColor: '#fefefe',
         height: '80%',
 
     }

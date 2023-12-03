@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Alert,
   Platform,
@@ -8,13 +8,13 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../App';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../App';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-function SignUp({navigation}: SignUpScreenProps) {
+function SignUp({ navigation }: SignUpScreenProps) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -31,6 +31,11 @@ function SignUp({navigation}: SignUpScreenProps) {
   const onChangePassword = useCallback(text => {
     setPassword(text.trim());
   }, []);
+
+  const toSignIn = useCallback(() => {
+    navigation.navigate('SignIn');
+  }, [navigation]);
+
   const onSubmit = useCallback(() => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
@@ -41,32 +46,63 @@ function SignUp({navigation}: SignUpScreenProps) {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
-    if (
-      !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
-        email,
-      )
-    ) {
-      return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
-    }
-    if (!/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@^!%*#?&]).{8,50}$/.test(password)) {
+    // if (
+    //   !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
+    //     email,
+    //   )
+    // ) {
+    //   return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
+    // }
+    // if (!/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@^!%*#?&]).{8,50}$/.test(password)) {
+    //   return Alert.alert(
+    //     '알림',
+    //     '비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.',
+    //   );
+    // }
+    if (!/^(?=.*[A-Za-z])(?=.*[0-9]).{8,50}$/.test(password)) {
       return Alert.alert(
         '알림',
-        '비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.',
+        '비밀번호는 영문,숫자만 포함하여 8자 이상 입력해야합니다.',
       );
     }
     console.log(email, name, password);
-    Alert.alert('알림', '회원가입 되었습니다.');
+    fetch('http://jlog.shop/member/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: email,
+        nickname: name,
+        password: password,
+        imgUrl:
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+      }),
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('결과: ', result.status, result.message);
+        if (result.status === 'OK') {
+          // 회원가입 성공 시
+          Alert.alert('알림', '회원가입 되었습니다.');
+          toSignIn();
+          console.log(result);
+        } else {
+          // 실패 시 에러 메세지
+          return Alert.alert('회원가입 실패', result.message);
+        }
+      });
   }, [email, name, password]);
 
   const canGoNext = email && name && password;
   return (
     <DismissKeyboardView>
       <View style={styles.inputWrapper}>
-        <Text style={styles.label}>이메일</Text>
+        <Text style={styles.label}>아이디</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeEmail}
-          placeholder="이메일을 입력해주세요"
+          placeholder="아이디를 입력해주세요"
           placeholderTextColor="#666"
           textContentType="emailAddress"
           value={email}
@@ -97,7 +133,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         <Text style={styles.label}>비밀번호</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
+          placeholder="비밀번호를 입력해주세요(영문,숫자)"
           placeholderTextColor="#666"
           onChangeText={onChangePassword}
           value={password}
