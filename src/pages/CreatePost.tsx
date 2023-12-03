@@ -48,8 +48,8 @@ function CreatePost({navigation}) {
 
   // 여행리스트 중 선택하는 모달
   const [showSelectModal, setShowSelectModal] = useState(false); // 모달 상태
-  const [selectedId, setSelectedId] = useState(); // 선택된 여행 경로 id
-  const [selectedTitle, setSelectedTitle] = useState(); // 선택된 여행 경로 title
+  const [selectedId, setSelectedId] = useState(''); // 선택된 여행 경로 id
+  const [selectedTitle, setSelectedTitle] = useState(''); // 선택된 여행 경로 title
 
   const openSelectModal = () => {
     setShowSelectModal(true);
@@ -112,7 +112,10 @@ function CreatePost({navigation}) {
       .then(response => response.json())
       .then(result => {
         console.log('결과: ', result.status);
-        if (result.status === 'OK') {
+        if (result.status === 'CREATED') {
+          setSelectedTitle('');
+          setTitle('');
+          setContent('');
           Alert.alert('성공', '게시물이 등록되었습니다');
           navigation.navigate('PostHome');
         } else {

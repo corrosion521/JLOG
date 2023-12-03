@@ -99,12 +99,12 @@ function PostHome({navigation}: PostScreenProps) {
               </View>
             </View>
           </View>
-          <Image
+          {/* <Image
             // source={{uri: item.postImg}}
             source={require('../Data/usj.jpg')}
             // source={require(item.postImg)}
             style={{height: 200, borderRadius: 10}}
-          />
+          /> */}
         </Pressable>
       </View>
     );
@@ -195,8 +195,10 @@ const styles = StyleSheet.create({
   },
   post: {
     display: 'flex',
-    marginBottom: 20,
+    paddingVertical: 10,
     // height: 250,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#8E8D8D',
   },
   postHeader: {
     display: 'flex',

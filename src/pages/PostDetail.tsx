@@ -24,6 +24,8 @@ import DismissKeyboardView from '../components/DismissKeyboardView';
 import IconA from 'react-native-vector-icons/AntDesign';
 import React from 'react';
 import {color} from 'react-native-elements/dist/helpers';
+import NaverMapView, {Marker, Path} from 'react-native-nmap';
+import Timeline from 'react-native-timeline-flatlist';
 
 export interface ILogData {
   day: string;
@@ -233,6 +235,7 @@ function PostDetail({route}) {
         .then(result => {
           console.log('스크랩 결과:', result.status);
           if (result.status === 'OK') {
+            return;
             // console.log(result.status);
           } else {
             // 실패 시 에러 메세지
@@ -253,6 +256,7 @@ function PostDetail({route}) {
         .then(response => response.json())
         .then(result => {
           if (result.status === 'OK') {
+            return;
             // console.log(result.status);
           } else {
             // 실패 시 에러 메세지
@@ -262,6 +266,44 @@ function PostDetail({route}) {
     }
   };
 
+  const [latitudes, setLatitudes] = useState<number[]>([36, 37, 38, 39]);
+
+  const [longitudes, setLongitudes] = useState<number[]>([127, 128, 129, 130]);
+  const markers = latitudes.map((latitude, index) => (
+    <Marker
+      key={`marker-${index}`}
+      coordinate={{
+        latitude: latitude,
+        longitude: longitudes[index],
+      }}
+      pinColor="blue"
+      caption={{text: (index + 1).toString()}}
+    />
+  ));
+
+  const pathCoordinates = latitudes.map((latitude, index) => ({
+    latitude: latitude,
+    longitude: longitudes[index],
+  }));
+
+  const [times, setTimes] = useState([
+    '2023-12-03T00:12:12',
+    '2023-12-03T00:12:12',
+    '2023-12-03T00:12:12',
+    '2023-12-03T00:12:12',
+  ]);
+
+  const [tripContent, setTripContent] = useState([
+    '출발함',
+    '점심을 먹었다',
+    '숙소에 도착',
+    '저녁밥',
+    '아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ',
+    '1111',
+    '2222',
+    '3333',
+    '4444',
+  ]);
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -304,13 +346,13 @@ function PostDetail({route}) {
             </View>
 
             {/* 날짜 선택 기능 */}
-            <ScrollView style={styles.selectDay} horizontal={true}>
+            {/* <ScrollView style={styles.selectDay} horizontal={true}>
               <FlatList
                 data={logList}
                 renderItem={renderDay}
                 keyExtractor={item => item.id}
                 horizontal={true}></FlatList>
-            </ScrollView>
+            </ScrollView> */}
 
             {/* 날짜별 여행 경로 지도, 타임라인 리스트 */}
 
@@ -319,15 +361,31 @@ function PostDetail({route}) {
             renderItem={renderItem}
             keyExtractor={item => item.id}
           /> */}
-            <View style={styles.log}>
+            {/* <View style={styles.log}>
               <Image
                 source={require('JLOG/src/Data/map.png')}
                 // source={{uri: imgSrc, height}}
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
                 resizeMode="cover"
               />
               <Text>{timelineData.timeline}</Text>
+            </View> */}
+            <View style={{height: 200}}>
+              <NaverMapView
+                style={{width: '100%', height: '100%'}}
+                zoomControl={false}
+                center={{
+                  zoom: 10,
+                  tilt: 0,
+                  latitude: 37,
+                  longitude: 128,
+                }}>
+                {markers}
+                <Path coordinates={pathCoordinates} />
+              </NaverMapView>
             </View>
+
+            <TimelineAPI data1={tripContent} data2={times} />
           </View>
 
           {/* 댓글, 좋아요 수 */}
@@ -371,6 +429,59 @@ function PostDetail({route}) {
     </SafeAreaView>
   );
 }
+
+const TimelineAPI = ({data1, data2, index}) => {
+  const [list, setList] = useState([
+    // {
+    //     time: <Text> 07am </Text>,
+    //     title: <Text>{data} </Text>,
+    //     description: <Text> 기상 </Text>
+    // },
+  ]);
+
+  useEffect(() => {
+    // data가 변경될 때마다 list 상태 업데이트
+    setList(
+      data1.map((con, index) => ({
+        time: <Text>{index + 1}</Text>,
+        title: <Text>{data1[index]}</Text>,
+        description: <Text>{data2[index]}</Text>,
+      })),
+    );
+  }, [data1]);
+
+  return (
+    <Timeline
+      style={{minHeight: 450}}
+      titleStyle={{fontSize: 13}}
+      data={list}
+      rowContainerStyle={{height: 150}}
+      eventContainerStyle={{height: 200}}
+      eventDetailStyle={{height: 2000}}
+      circleSize={15}
+      circleColor="rgb(45,156,219)"
+      lineColor="rgb(45,156,219)"
+      timeContainerStyle={{minWidth: 50, marginTop: 0}}
+      timeStyle={{
+        fontSize: 10,
+        textAlign: 'center',
+        backgroundColor: '#ff9797',
+        color: 'white',
+        padding: 0,
+        borderRadius: 13,
+      }}
+      descriptionStyle={{color: 'red'}}
+      options={{
+        style: {
+          borderWidth: 50,
+          marginBottom: 20,
+          borderColor: 'white',
+          backgroundColor: 'white',
+        },
+      }}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   rootContainer: {
