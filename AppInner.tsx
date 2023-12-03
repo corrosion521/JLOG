@@ -5,14 +5,16 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import Root from './src/pages/Root';
 import First from './src/pages/First';
-import CreatePost from './src/pages/CreatePost';
-
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useAuth} from './src/AuthContext';
 import {NavigationContainer} from '@react-navigation/native';
-// import SettingsMy from './src/pages/SettingsMy';
+import SettingsMy from './src/pages/SettingsMy';
 import {KeyboardAvoidingView} from 'react-native';
+import RootList from './src/pages/RootList';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import CreatePost from './src/pages/CreatePost';
+
 export type LoggedInParamList = {
   Settings: undefined;
   Root: undefined;
@@ -49,19 +51,52 @@ function AppInner() {
         component={Posts}
         options={{
           title: '게시물',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="list" color={color} size={size} />
+          ),
           headerShown: false,
         }}
       />
-      <Tab.Screen name="Root" component={Root} options={{title: '나의 경로'}} />
+      <Tab.Screen
+        name="Root"
+        component={Root}
+        options={{
+          title: '경로 기록',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="record-vinyl" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="RootList"
+        component={RootList}
+        options={{
+          title: '나의 경로',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="route" color={color} size={size} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="CreatePost"
         component={CreatePost}
-        options={{title: '게시물 작성', headerShown: false}}
+        options={{
+          title: '게시물 작성',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="edit" color={color} size={size} />
+          ),
+          headerShown: false,
+        }}
       />
       <Tab.Screen
         name="Settings"
         component={Settings}
-        options={{title: '마이페이지'}}
+        options={{
+          title: '마이페이지',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="user" color={color} size={size} />
+          ),
+        }}
       />
     </Tab.Navigator>
   ) : (
