@@ -14,13 +14,16 @@ import {
   KeyboardAvoidingView,
   NativeModules,
   Platform,
+  Alert,
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import { IPostData } from '../Data/PostData';
-import { SetStateAction, useCallback, useEffect, useState } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {Avatar} from 'react-native-elements';
+import {IPostData} from '../Data/PostData';
+import {SetStateAction, useCallback, useEffect, useState} from 'react';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 import IconA from 'react-native-vector-icons/AntDesign';
+import React from 'react';
+import {color} from 'react-native-elements/dist/helpers';
 
 export interface ILogData {
   day: string;
@@ -58,29 +61,55 @@ const logList: ILogData[] = [
   },
 ];
 
-function PostDetail({ route }) {
-  const { item } = route.params; // route.params 안에서 item을 받아옵니다.
+function PostDetail({route}) {
+  const {item} = route.params; // route.params 안에서 item을 받아옵니다.
+
+  console.log(item.id);
+
+  const [profileImg, setProfileImg] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+  );
+
+  if (item.member.imgageUrl != null) setProfileImg(item.member.imageUrl);
+
+  // 댓글 게시 후 새로고침에 이용
+  const [rflag, setRflag] = useState<boolean>(false);
+
+  const [isScrap, setIsScrap] = useState(false);
 
   // * To Do : postId 등의 값으로 해당 게시물의 내용 받아오기 *
-  // fetch(`http://jlog.shop/api/v1/post/details/${item.postId}`){
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // })
-  //   .then((response) => response.json())
-  //   .then((result) => {
-  //     console.log("결과: ", result.code);
-  //     if (result.code === "OK") {
-  //       // 로그인 성공 시
-  //       setIsLogin(true);
-  //       navigate("/"); // 메인페이지로 이동
-  //       console.log(result);
-  //     } else {
-  //       // 실패 시 에러 메세지
-  //       alert(result.message);
-  //     }
-  // };
+  const [content, setContent] = useState();
+  const [pathId, setPathId] = useState();
+  const [locationInfo, setLocationInfo] = useState([]);
+  const [scrapCnt, setScrapCnt] = useState();
+  const [commentList, setCommentList] = useState([]);
+  useEffect(() => {
+    fetch(`http://jlog.shop/api/v1/post/details/${item.id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('결과: ', result.status);
+        if (result.status === 'OK') {
+          const detail = result.result;
+          console.log(detail);
+          setContent(detail.content);
+          setPathId(detail.locationPathId);
+          setLocationInfo(detail.locationInfo);
+          setScrapCnt(detail.scraps);
+          // setCommentList(detail.commentList);
+        } else {
+          // 실패 시 에러 메세지
+          Alert.alert('알림', result.message);
+        }
+      });
+  }, [isScrap]);
+  // }, []);
+
+  // const contents = detail.content;
   const contents = '게시물 내용부분';
 
   // const renderItem = ({item}: {item: ILogData}) => {
@@ -108,7 +137,7 @@ function PostDetail({ route }) {
   const [timelineData, setTimelineData] = useState<ILogData>(logList[0]);
   const [selectedDay, setSelectedDay] = useState<string>(logList[0].day);
 
-  const renderDay = ({ item }: { item: ILogData }) => {
+  const renderDay = ({item}: {item: ILogData}) => {
     const handlePressDay = () => {
       setTimelineData(item);
       setSelectedDay(item.day);
@@ -130,7 +159,7 @@ function PostDetail({ route }) {
   // 테스트용 댓글들 list
   const [replyList, setReplyList] = useState<string[]>(['댓글1', '댓글2']);
 
-  const renderReply = ({ item }: { item: string }) => {
+  const renderReply = ({item}: {item: string}) => {
     return (
       <View style={styles.reply}>
         <Avatar
@@ -140,54 +169,112 @@ function PostDetail({ route }) {
           }}
         />
         <View>
-          <Text style={styles.nickname}>작성자 닉네임</Text>
+          {/* <Text style={styles.nickname}>작성자 닉네임</Text> */}
           <Text style={styles.replyContents}>{item}</Text>
         </View>
       </View>
     );
   };
+
   // 댓글 작성
   // 댓글 내용 담을 변수
   const [reply, setReply] = useState<string>('');
-  // 댓글 게시 후 새로고침에 이용
-  const [rflag, setRflag] = useState<boolean>(false);
 
   const onChangeReply = useCallback((text: string) => {
     setReply(text);
   }, []);
 
-  const onSubmitReply = ({ reply }: { reply: string }) => {
+  const onSubmitReply = ({reply}: {reply: string}) => {
     // API 호출 및 데이터 저장 코드 작성
-    // 완료된 후 페이지 새로고침
-    // fetch(`/community/comment/${data}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     content: reply,
-    //   }),
-    // })
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     setRflag(true);
-    //   });
+
+    fetch('http://jlog.shop/api/v1/comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: item.id,
+        content: reply,
+      }),
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result.status);
+
+        if (result.status === 'CREATED') {
+          // 완료된 후 페이지 새로고침
+          setRflag(!rflag);
+        } else {
+          // 실패 시 에러 메세지
+          return Alert.alert('알림1', result.message);
+        }
+      });
+
+    // 테스트용
     setReplyList([...replyList, reply]);
+  };
+
+  // 스크랩 기능
+  // const [isScrap, setIsScrap] = useState(false);
+  const handlePressScrap = () => {
+    setIsScrap(!isScrap);
+    if (!isScrap) {
+      fetch('http://jlog.shop/api/v1/interaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: item.id,
+          type: 'SCRAP',
+        }),
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('스크랩 결과:', result.status);
+          if (result.status === 'OK') {
+            // console.log(result.status);
+          } else {
+            // 실패 시 에러 메세지
+            // return Alert.alert('알림1', result.message);
+          }
+        });
+    } else {
+      fetch('http://jlog.shop/api/v1/interaction', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: item.id,
+          type: 'SCRAP',
+        }),
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.status === 'OK') {
+            // console.log(result.status);
+          } else {
+            // 실패 시 에러 메세지
+            return Alert.alert('알림2', result.message);
+          }
+        });
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={styles.rootContainer}
-      // behavior="padding"
-      // keyboardVerticalOffset={160}
-      // keyboardVerticalOffset={55}
+        // behavior="padding"
+        // keyboardVerticalOffset={160}
+        // keyboardVerticalOffset={55}
       >
         {/* <DismissKeyboardView> */}
         <ScrollView>
           <View style={styles.post}>
             <View style={styles.title}>
-              <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>
+              <Text style={{fontSize: 16, fontWeight: 'bold', color: 'black'}}>
                 {item.title}
               </Text>
             </View>
@@ -196,23 +283,24 @@ function PostDetail({ route }) {
               <Avatar
                 rounded
                 source={{
-                  uri: item.profileImg,
+                  uri: profileImg,
                 }}
               />
-              <Text style={{ fontSize: 14, color: 'black' }}>
-                {item.nickname}
+              <Text style={{fontSize: 14, color: 'black'}}>
+                {item.member.nickname}
               </Text>
             </View>
 
-            <Image
-              source={{ uri: item.postImg }}
+            {/* 게시물 사진 부분 */}
+            {/* <Image
+              source={{uri: item.postImg}}
               // source={require('../Data/usj.jpg')}
               // source={require(item.postImg)}
-              style={{ height: 200, borderRadius: 10 }}
-            />
+              style={{height: 200, borderRadius: 10}}
+            /> */}
 
             <View style={styles.contents}>
-              <Text>{contents}</Text>
+              <Text>{content}</Text>
             </View>
 
             {/* 날짜 선택 기능 */}
@@ -235,7 +323,7 @@ function PostDetail({ route }) {
               <Image
                 source={require('JLOG/src/Data/map.png')}
                 // source={{uri: imgSrc, height}}
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
                 resizeMode="cover"
               />
               <Text>{timelineData.timeline}</Text>
@@ -244,20 +332,25 @@ function PostDetail({ route }) {
 
           {/* 댓글, 좋아요 수 */}
           <View style={styles.info}>
-            <Text>댓글 {replyList.length}개</Text>
-            <Text>스크랩 3회</Text>
+            <Text>댓글 {commentList.length}개</Text>
+            {/* <Text>댓글 {detail.commentList.length}개</Text> */}
+            <Text>스크랩 {scrapCnt}회</Text>
+            {/* <Text>스크랩 {detail.scraps}회</Text> */}
           </View>
 
           {/* 댓글 창 */}
           <View style={styles.replyList}>
-            <FlatList data={replyList} renderItem={renderReply}></FlatList>
+            <FlatList data={commentList} renderItem={renderReply}></FlatList>
           </View>
         </ScrollView>
 
         <View style={styles.footer}>
           {/* 스크랩 버튼 */}
-          <Pressable>
-            <IconA name="staro" size={20}></IconA>
+          <Pressable onPress={handlePressScrap}>
+            <IconA
+              name={isScrap ? 'star' : 'staro'}
+              size={20}
+              color={isScrap ? 'orange' : 'black'}></IconA>
           </Pressable>
           {/* 댓글 입력 창 */}
           <View style={styles.textInputContainer}>
@@ -269,7 +362,7 @@ function PostDetail({ route }) {
               autoCorrect={false}
               onChangeText={onChangeReply}
               enterKeyHint="done"
-              onSubmitEditing={() => onSubmitReply({ reply })}
+              onSubmitEditing={() => onSubmitReply({reply})}
             />
           </View>
         </View>
@@ -309,9 +402,9 @@ const styles = StyleSheet.create({
   },
   contents: {},
   selectDay: {},
-  log: { marginBottom: 10 },
-  day: { paddingRight: 10 },
-  pressedDay: { paddingRight: 10, color: 'black', fontWeight: 'bold' },
+  log: {marginBottom: 10},
+  day: {paddingRight: 10},
+  pressedDay: {paddingRight: 10, color: 'black', fontWeight: 'bold'},
   textInputContainer: {
     marginTop: 'auto',
     // borderTopWidth: 1,

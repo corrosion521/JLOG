@@ -1,8 +1,9 @@
 import {useState, useCallback} from 'react';
-import {FlatList, Pressable, StyleSheet, View} from 'react-native';
+import {Dimensions, FlatList, Pressable, StyleSheet, View} from 'react-native';
 import {SearchBar, Text} from 'react-native-elements';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 import IconA from 'react-native-vector-icons/AntDesign';
+import NaverMapView, {Marker, Path} from 'react-native-nmap';
 
 // 국내여행 카테고리 리스트
 export interface category {
@@ -99,29 +100,63 @@ function Category() {
         {/* 카테고리 리스트 */}
         <View style={styles.categoryList}>
           {/* 국내여행 */}
-          <Pressable onPress={() => setToggle(!toggle)}>
+          {/* <Pressable onPress={() => setToggle(!toggle)}>
             <View style={styles.categoryHeader}>
               <Text style={styles.categoryTitle}>국내여행</Text>
               <IconA name={toggle ? 'up' : 'down'} size={16}></IconA>
             </View>
           </Pressable>
-          {toggle ? (
-            <View>
-              <FlatList
-                data={categoryList}
-                renderItem={renderCategory}
-                keyExtractor={item => item.id}></FlatList>
-            </View>
-          ) : null}
+          {toggle ? ( */}
+          <View>
+            <FlatList
+              data={categoryList}
+              renderItem={renderCategory}
+              keyExtractor={item => item.id}></FlatList>
+          </View>
+          {/* // ) : null} */}
           {/* 해외여행 */}
-          <Pressable>
+          {/* <Pressable>
             <View style={styles.categoryHeader}>
               <Text style={styles.categoryTitle}>해외여행</Text>
               <IconA name="right" size={16}></IconA>
             </View>
-          </Pressable>
+          </Pressable> */}
         </View>
       </DismissKeyboardView>
+      <View
+        style={{
+          width: Dimensions.get('window').width - 30,
+          height: 200,
+          marginTop: 10,
+        }}>
+        <NaverMapView
+          style={{width: '100%', height: '100%'}}
+          zoomControl={false}
+          center={{
+            zoom: 10,
+            tilt: 50,
+            latitude: 37,
+            longitude: 126,
+          }}>
+          <Marker
+            coordinate={{
+              latitude: 37,
+              longitude: 126,
+            }}
+            pinColor="blue"
+          />
+          <Path
+            coordinates={[
+              {
+                latitude: 37,
+                longitude: 126,
+              },
+              {latitude: 38, longitude: 127},
+            ]}
+          />
+          <Marker coordinate={{latitude: 38, longitude: 127}} />
+        </NaverMapView>
+      </View>
     </View>
   );
 }

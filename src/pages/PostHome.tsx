@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   FlatList,
@@ -18,12 +18,12 @@ import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import {IPostData, postData} from '../Data/PostData';
+// import {IPostData, postData} from '../Data/PostData';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 export type PostStackParamList = {
   PostHome: undefined;
-  PostDetail: {item: IPostData};
+  PostDetail: {item};
   Search: undefined;
   Category: undefined;
 };
@@ -36,29 +36,58 @@ function PostHome({navigation}: PostScreenProps) {
     navigation.navigate('Search');
   }, [navigation]);
 
+  // 게시물 누르면 게시물 상세 페이지로 이동
   const onPressPost = useCallback(
-    (item: IPostData) => {
+    item => {
       navigation.navigate('PostDetail', {item});
     },
     [navigation],
   );
 
+  // 카테고리 아이콘 누르면 카테고리 페이지로 이동
   const onPressCategory = useCallback(() => {
     navigation.navigate('Category');
   }, [navigation]);
 
+  // 게시물 목록 가져오기
+  const [postData, setPostData] = useState([]);
+  const [refresh, setRefesh] = useState(false); // 새로고침 버튼
+  useEffect(() => {
+    fetch('http://jlog.shop/api/v1/post?pageNumber=0&pageSize=10', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('결과: ', result.status);
+        if (result.status === 'OK') {
+          setPostData(result.result.postList);
+
+          console.log(result.result);
+        } else {
+          // 실패 시 에러 메세지
+          return Alert.alert('알림', result.message);
+        }
+      });
+  }, [refresh]);
+
+  const [profileImg, setProfileImg] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+  );
+
   // 각 게시물 프레임
-  const renderItem = ({item}: {item: IPostData}) => {
+  const renderItem = ({item}: {item}) => {
+    if (item.member.imageUrl != null) setProfileImg(item.member.imageUrl);
     return (
-      // <TouchableWithoutFeedback>
-      // <SafeAreaView>
       <View style={styles.post}>
         <Pressable onPress={e => onPressPost(item)}>
           <View style={styles.postHeader}>
             <Avatar
               rounded
               source={{
-                uri: item.profileImg,
+                uri: profileImg,
               }}
             />
             <View>
@@ -66,7 +95,7 @@ function PostHome({navigation}: PostScreenProps) {
                 <Text style={styles.postTitle}>{item.title}</Text>
               </View>
               <View>
-                <Text style={{fontSize: 12}}>{item.nickname}</Text>
+                <Text style={{fontSize: 12}}>{item.member.nickname}</Text>
               </View>
             </View>
           </View>
@@ -78,8 +107,6 @@ function PostHome({navigation}: PostScreenProps) {
           />
         </Pressable>
       </View>
-      // </SafeAreaView>
-      // </TouchableWithoutFeedback>
     );
   };
 
@@ -124,12 +151,13 @@ function PostHome({navigation}: PostScreenProps) {
         </Pressable>
       </View>
 
-      <View
-      // style={{
-      //   marginBottom: 130,
-      // }}
-      >
-        <Text style={styles.title}>인기 게시물</Text>
+      <View>
+        <View style={styles.homeHeader}>
+          <Text style={styles.title}>인기 게시물</Text>
+          <Pressable onPress={() => setRefesh(!refresh)}>
+            <Icon name="reload" size={18} style={{padding: 5}}></Icon>
+          </Pressable>
+        </View>
         <SafeAreaView
           style={{
             justifyContent: 'center',
@@ -180,6 +208,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: 'black',
+  },
+  homeHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
